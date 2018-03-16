@@ -1,8 +1,14 @@
-const Block = require('.block')
+const Block = require('./block')
+const Transaction = require('./transaction.js')
 
 class Blockchain {
-  constructore() {
+  constructor() {
     this.chain = [this.createGenesisBlock()];
+    this.difficulty = 2
+
+    this.pendingTransactions = []
+
+    this.miningReward = 100
   }
 
   createGenesisBlock() {
@@ -10,25 +16,55 @@ class Blockchain {
   }
 
   getLastBlock() {
-    return this.chain[this.cain.length - 1];
+    return this.chain[this.chain.length - 1];
   }
 
-  addBlock(newBlock){
-    newBlock.previousBlockHeader = this.getLastBlock().header;
-    newBlock.header = newBlock.calculateHash();
-    this.chain.push(newBlock);
+  createTransaction(transaction) {
+    this.pendingTransactions.push(transaction)
   }
+
+  minePendingTransactions(miningRewardAddress) {
+    let block = new Block(Date.now(), this.pendingTransactions)
+    block.mineBlock(this.difficulty)
+
+    this.chain.push(block)
+    this.pendingTransactions = [
+      new Transaction(null, miningRewardAddress, this.miningReward)
+    ]
+  }
+
+  getBalanceOfAddress(address){
+    let balance = 0;
+
+    for(const block of this.chain){
+      for(const trans of block.transactions){
+        if(trans.fromAddress === address){
+          balance -= trans.amount;
+        }
+        if(trans.toAddress === address){
+          balance += trans.amount;
+        }
+      }
+    }
+    return balance;
+  }
+
+  // addBlock(newBlock){
+  //   newBlock.previousBlockHeader = this.getLastBlock().header;
+  //   newBlock.mineBlock(this.difficulty);
+  //   this.chain.push(newBlock);
+  // }
 
   isChainValid() {
     for (let i=1; i<this.chain.length; i++){
       const currentBlock = this.chain[i];
       const previousBlock = this.chain[i - 1];
 
-      if (currentBlock.hash !== currentBlock.calculateHash()) {
+      if (currentBlock.header !== currentBlock.calculateHash()) {
         return false
       }
 
-      if (currentBlock.previousHash !== previousBlock.has) {
+      if (currentBlock.previousBlockHeader !== previousBlock.header) {
         return false;
       }
     }
