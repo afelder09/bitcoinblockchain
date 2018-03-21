@@ -22,10 +22,14 @@ let ansonCoin = new Blockchain();
 
 // For testing transaction logic
 console.log('Creating some transactions...')
-ansonCoin.createTransaction(new Transaction('address1', 'address2', 100))
+ansonCoin.createTransaction(new Transaction('address1', 'ansons-address', 100))
 ansonCoin.createTransaction(new Transaction('address2', 'address1', 50))
 
 console.log('Starting the miner...')
 ansonCoin.minePendingTransactions('ansons-address')
 
-console.log('Balance of ANsons address is ', ansonCoin.getBalanceOfAddress('ansons-address'))
+console.log('Balance of Ansons address is ', ansonCoin.getBalanceOfAddress('ansons-address'))
+
+console.log('Starting the miner again!')
+ansonCoin.minePendingTransactions('ansons-address')
+console.log('Balance of Anson address is', ansonCoin.getBalanceOfAddress('asnsons-address'));

@@ -12,7 +12,7 @@ class Blockchain {
   }
 
   createGenesisBlock() {
-    return new Block(0, "This Is The Genesis Block", {countAmount: 10}, Date());
+    return new Block(0, "01/01/2017", "Genesis block", "0");
   }
 
   getLastBlock() {
@@ -49,11 +49,11 @@ class Blockchain {
     return balance;
   }
 
-  // addBlock(newBlock){
-  //   newBlock.previousBlockHeader = this.getLastBlock().header;
-  //   newBlock.mineBlock(this.difficulty);
-  //   this.chain.push(newBlock);
-  // }
+  addBlock(newBlock) {
+      newBlock.previousHash = this.getLatestBlock().hash;
+      newBlock.mineBlock(this.difficulty);
+      this.chain.push(newBlock);
+  }
 
   isChainValid() {
     for (let i=1; i<this.chain.length; i++){
